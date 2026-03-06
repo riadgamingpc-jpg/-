@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>BOU BAZAR TOP UP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family: Arial;
+background:#0f0f0f;
+color:white;
+text-align:center;
+margin:0;
+}
+
+header{
+background:#00ffd5;
+color:black;
+padding:15px;
+font-size:24px;
+font-weight:bold;
+}
+
+.payment{
+margin:15px;
+font-size:18px;
+}
+
+.package{
+background:#1f1f1f;
+margin:10px;
+padding:15px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.package:hover{
+background:#333;
+}
+
+.selected{
+background:#00ffd5;
+color:black;
+}
+
+#selectedBox{
+background:#222;
+margin:15px;
+padding:15px;
+border-radius:10px;
+}
+
+button{
+background:#00ffd5;
+border:none;
+padding:12px 25px;
+font-size:18px;
+border-radius:6px;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+button:hover{
+background:#00c7a5;
+}
+
+small{
+color:#ffcc00;
+}
+
+</style>
+
+<script>
+
+let selectedPackage="";
+let selectedPrice="";
+
+function selectPackage(name,price,id){
+
+selectedPackage=name;
+selectedPrice=price;
+
+let packs=document.querySelectorAll(".package");
+
+packs.forEach(p=>{
+p.classList.remove("selected");
+});
+
+document.getElementById(id).classList.add("selected");
+
+document.getElementById("selectedBox").innerHTML=
+"Selected: "+name+" - "+price;
+
+}
+
+function order(){
+
+if(selectedPackage==""){
+alert("Package select করুন");
+return;
+}
+
+let text="BOU BAZAR TOP UP\n\nPackage: "+selectedPackage+"\nPrice: "+selectedPrice;
+
+let url="https://wa.me/8801624997988?text="+encodeURIComponent(text);
+
+window.open(url);
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<header>BOU BAZAR TOP UP 💎</header>
+
+<div class="payment">
+Payment: bKash / Nagad <br>
+<b>01851634841</b>
+</div>
+
+<div id="selectedBox">
+Selected: None
+</div>
+
+<div id="p1" class="package" onclick="selectPackage('25 Diamond','22 TK','p1')">
+<h3>25 Diamond 💎</h3>
+<p>22 TK</p>
+</div>
+
+<div id="p2" class="package" onclick="selectPackage('50 Diamond','38 TK','p2')">
+<h3>50 Diamond 💎</h3>
+<p>38 TK</p>
+</div>
+
+<div id="p3" class="package" onclick="selectPackage('115 Diamond','80 TK','p3')">
+<h3>115 Diamond 💎</h3>
+<p>80 TK</p>
+</div>
+
+<div id="p4" class="package" onclick="selectPackage('240 Diamond','160 TK','p4')">
+<h3>240 Diamond 💎</h3>
+<p>160 TK</p>
+</div>
+
+<div id="p5" class="package" onclick="selectPackage('610 Diamond','310 TK','p5')">
+<h3>610 Diamond 💎</h3>
+<p>310 TK</p>
+</div>
+
+<div id="p6" class="package" onclick="selectPackage('1240 Diamond','620 TK','p6')">
+<h3>1240 Diamond 💎</h3>
+<p>620 TK</p>
+</div>
+
+<div id="p7" class="package" onclick="selectPackage('Level Up Pass','420 TK','p7')">
+<h3>Level Up Pass</h3>
+<p>420 TK</p>
+</div>
+
+<div id="p8" class="package" onclick="selectPackage('EVO Gun 7 Days','69 TK','p8')">
+<h3>🔥 EVO Gun (7 Days)</h3>
+<p>69 TK</p>
+</div>
+
+<div id="p9" class="package" onclick="selectPackage('EVO Gun 30 Days','330 TK','p9')">
+<h3>🔥 EVO Gun (30 Days)</h3>
+<p>330 TK</p>
+</div>
+
+<div id="p10" class="package" onclick="selectPackage('EVO Gun 60 Days','650 TK','p10')">
+<h3>🔥 EVO Gun (60 Days)</h3>
+<p>650 TK</p>
+</div>
+
+<div id="p11" class="package" onclick="selectPackage('UCL Light Offer','1 TK','p11')">
+<h3>🎁 UCL Light</h3>
+<p>1 TK</p>
+<small>⚡ মাঝে মাঝে অফার</small>
+</div>
+
+<div id="p12" class="package" onclick="selectPackage('UCL Offer','10 TK','p12')">
+<h3>🎁 UCL</h3>
+<p>10 TK</p>
+<small>⚡ মাঝে মাঝে অফার</small>
+</div>
+
+<div id="p13" class="package" onclick="selectPackage('Matli Offer','660 TK','p13')">
+<h3>🎁 Matli</h3>
+<p>660 TK</p>
+<small>⚡ মাঝে মাঝে অফার</small>
+</div>
+
+<button onclick="order()">Order Now</button>
+
+</body>
+</html> 
