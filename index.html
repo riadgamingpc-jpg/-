@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RG TOPUP</title>
+
+<style>
+:root{
+  --primary:#ff4500;
+  --secondary:#0f3460;
+  --bg:#f4f6f9;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Segoe UI,sans-serif;
+  background:var(--bg);
+  padding-bottom:90px;
+}
+
+.header{
+  background:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  border-bottom:3px solid var(--primary);
+}
+
+.logo{
+  font-size:24px;
+  font-weight:900;
+  color:var(--secondary);
+}
+
+.hero{
+  background:var(--secondary);
+  color:white;
+  text-align:center;
+  padding:25px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  padding:15px;
+}
+
+.card{
+  background:white;
+  border-radius:12px;
+  padding:15px;
+  box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.product-name{
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.price{
+  color:var(--primary);
+  font-size:20px;
+  font-weight:bold;
+}
+
+.btn{
+  width:100%;
+  border:none;
+  background:var(--primary);
+  color:white;
+  padding:12px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.btn:hover{
+  opacity:.9;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.admin{
+  padding:15px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+}
+
+th,td{
+  border:1px solid #ddd;
+  padding:8px;
+}
+
+th{
+  background:var(--secondary);
+  color:white;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:15px;
+  border-top:1px solid #ddd;
+}
+
+.nav-btn{
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.empty{
+  text-align:center;
+  padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo">RG TOPUP</div>
+  <div>🛒 Gaming Store</div>
+</div>
+
+<!-- HOME PAGE -->
+<div id="homePage" class="page active">
+
+  <div class="hero">
+    <h2>আজকের ধামাকা অফার</h2>
+    <p>সাশ্রয়ী মূল্যে টপ-আপ প্যাকেজ</p>
+  </div>
+
+  <div class="grid" id="productContainer"></div>
+
+</div>
+
+<!-- ADMIN PAGE -->
+<div id="adminPage" class="page">
+  <div class="admin">
+
+    <h2>Admin Dashboard</h2>
+    <br>
+
+    <table>
+      <thead>
+        <tr>
+          <th>UID</th>
+          <th>Package</th>
+          <th>TRX ID</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="orderTable"></tbody>
+    </table>
+
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-btn" onclick="openHome()">🏠 Home</div>
+  <div class="nav-btn" onclick="openAdmin()">⚙️ Admin</div>
+</div>
+
+<script>
+
+const ADMIN_PASSWORD = "123456";
+
+const products = [
+  {
+    name:"25 Diamond",
+    price:18
+  },
+  {
+    name:"100 Diamond",
+    price:69
+  },
+  {
+    name:"115 Diamond",
+    price:78
+  },
+  {
+    name:"310 Diamond",
+    price:220
+  },
+  {
+    name:"520 Diamond",
+    price:370
+  },
+  {
+    name:"Monthly Membership",
+    price:770
+  }
+];
+
+function renderProducts(){
+
+  const container =
+    document.getElementById("productContainer");
+
+  container.innerHTML = "";
+
+  products.forEach(product=>{
+
+    container.innerHTML += `
+      <div class="card">
+
+        <div class="product-name">
+          ${product.name}
+        </div>
+
+        <div class="price">
+          ৳ ${product.price}
+        </div>
+
+        <button
+          class="btn"
+          onclick="buy('${product.name}')">
+          Order Now
+        </button>
+
+      </div>
+    `;
+  });
+}
+
+function buy(packageName){
+
+  const uid =
+    prompt("আপনার UID লিখুন");
+
+  if(!uid) return;
+
+  const trx =
+    prompt("TRX ID লিখুন");
+
+  if(!trx) return;
+
+  const orders =
+    JSON.parse(
+      localStorage.getItem("orders")
+    ) || [];
+
+  orders.push({
+    uid,
+    packageName,
+    trx,
+    time:new Date().toLocaleString()
+  });
+
+  localStorage.setItem(
+    "orders",
+    JSON.stringify(orders)
+  );
+
+  alert("অর্ডার জমা হয়েছে");
+}
+
+function loadOrders(){
+
+  const tbody =
+    document.getElementById("orderTable");
+
+  tbody.innerHTML = "";
+
+  const orders =
+    JSON.parse(
+      localStorage.getItem("orders")
+    ) || [];
+
+  if(orders.length===0){
+
+    tbody.innerHTML =
+      `<tr>
+        <td colspan="4" class="empty">
+          No Orders
+        </td>
+      </tr>`;
+
+    return;
+  }
+
+  orders.forEach(order=>{
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${order.uid}</td>
+        <td>${order.packageName}</td>
+        <td>${order.trx}</td>
+        <td>${order.time}</td>
+      </tr>
+    `;
+  });
+}
+
+function openHome(){
+
+  document
+    .getElementById("homePage")
+    .classList.add("active");
+
+  document
+    .getElementById("adminPage")
+    .classList.remove("active");
+}
+
+function openAdmin(){
+
+  const pass =
+    prompt("Admin Password");
+
+  if(pass !== ADMIN_PASSWORD){
+
+    alert("Wrong Password");
+    return;
+  }
+
+  document
+    .getElementById("homePage")
+    .classList.remove("active");
+
+  document
+    .getElementById("adminPage")
+    .classList.add("active");
+
+  loadOrders();
+}
+
+renderProducts();
+
+</script>
+
+</body>
+</html>
